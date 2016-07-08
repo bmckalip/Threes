@@ -3,7 +3,7 @@
 
 State::State(vector<int> pileSizes) {
 	//initialize piles using the sizes provided. any number of piles is supported
-	for (int i = 0; i < pileSizes.size(); i++) {
+	for (size_t i = 0; i < pileSizes.size(); i++) {
 		piles.push_back(Pile(pileSizes.at(i)));
 	}
 	findNextBestMove();
@@ -29,4 +29,12 @@ void State::setPiles(vector<Pile> piles) {
 
 vector<int> State::getNextBestMove() {
 	return nextBestMove;
+}
+
+bool operator==(const State& lhs, const State& rhs) { 
+	if (lhs.piles == rhs.piles) {
+		return true;
+	}
+
+	return false;
 }

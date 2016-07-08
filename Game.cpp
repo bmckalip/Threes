@@ -7,6 +7,7 @@ Game::Game(vector<int> pileSizes) {
 	currentState = State(pileSizes);
 	turn = 0;
 	winner = NULL;
+	isWinner = false;
 }
 
 int Game::play() {
@@ -22,12 +23,12 @@ int Game::play() {
 
 void Game::playerTurn() {
 	cout << "Pile indexes: ";
-	for (int i = 0; i < currentState.getPiles().size(); i++) {
+	for (size_t i = 0; i < currentState.getPiles().size(); i++) {
 		cout << i << ",\t";
 	}
 	cout << endl;
 	cout << "Pile Values: ";
-	for (int i = 0; i < currentState.getPiles().size(); i++) {
+	for (size_t i = 0; i < currentState.getPiles().size(); i++) {
 		cout << currentState.getPiles().at(i).getSize() << ",\t";
 	}
 	cout << endl;
@@ -61,11 +62,12 @@ bool Game::executeMove(vector<int> move) {
 	}
 
 	currentState.setPiles(piles);
+	return true;
 }
 
 bool Game::isValid(vector<int> move) {
-	for (int i = 0; i < move.size(); i++) {
-		if (move.at(i) > currentState.getPiles().size()) return false;
+	for (size_t i = 0; i < move.size(); i++) {
+		if (size_t(move.at(i)) > currentState.getPiles().size()) return false;
 	}
 	return true;
 }

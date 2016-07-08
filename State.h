@@ -13,7 +13,8 @@ public:
 	vector<Pile> getPiles();
 	void setPiles(vector<Pile> newPiles);
 	vector<int> getNextBestMove();
-
+	friend bool operator== (const State& lhs, const State& rhs);
+	
 private:
 	void findNextBestMove();
 	vector<Pile> piles;

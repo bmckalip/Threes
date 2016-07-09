@@ -4,10 +4,9 @@
 #include <iostream>
 
 Game::Game(vector<int> pileSizes) {
-	currentState = State(pileSizes);
-	turn = 0;
+	turn = false;
+	currentState = State({Pile(pileSizes.at(0)), Pile(pileSizes.at(1)), Pile(pileSizes.at(2))}, turn);
 	winner = NULL;
-	isWinner = false;
 }
 
 int Game::play() {
@@ -42,7 +41,7 @@ void Game::playerTurn() {
 }
 
 void Game::AITurn() {
-	vector<int> move = currentState.getNextBestMove();
+	vector<int> move = currentState.getBestMove();
 	if (executeMove(move)) {
 		turn = !turn;
 	}

@@ -3,70 +3,77 @@
 #include <limits>
 #include <iostream>
 
-Game::Game(vector<int> pileSizes) {
-	turn = false;
-	currentState = State({Pile(pileSizes.at(0)), Pile(pileSizes.at(1)), Pile(pileSizes.at(2))}, turn);
-	winner = NULL;
+Game::Game(int pileSizes[]) {
+	turn = 1;
+	Pile piles[] = { Pile(pileSizes[0]), Pile(pileSizes[1]), Pile(pileSizes[2]) };
+	currentState = State(piles, turn);
+	winner = -1;
 }
 
 int Game::play() {
-	while (winner == NULL) {
+	
+	while (winner == -1) {
+		printState();
 		if (turn == 0) {
-			playerTurn();
-		} else {
 			AITurn();
+		} else {
+			playerTurn();
 		}
 	}
 	return winner;
 }
 
 void Game::playerTurn() {
-	cout << "Pile indexes: ";
-	for (size_t i = 0; i < currentState.getPiles().size(); i++) {
-		cout << i << ",\t";
-	}
-	cout << endl;
-	cout << "Pile Values: ";
-	for (size_t i = 0; i < currentState.getPiles().size(); i++) {
-		cout << currentState.getPiles().at(i).getSize() << ",\t";
-	}
-	cout << endl;
-
-	vector<int> move;
-	cout << "Enter two indexes you wish to subtract seperated by a space: (eg. 0 2)" << endl;
-	cin >> move.at(0) >> move.at(1);
-	if (executeMove(move)) {
-		turn = !turn;
-	}
+	pair<int, int> move;
+	cout << "Enter two indexes you wish to subtract seperated by a space: (eg. 0 2): ";
+	cin >> move.first >> move.second;
+	
+	currentState = currentState.executeMove(move);
+	turn = currentState.getTurn();
 }
 
 void Game::AITurn() {
-	vector<int> move = currentState.getBestMove();
-	if (executeMove(move)) {
-		turn = !turn;
-	}
+	pair<int, int> move = currentState.getBestMove();
+	cout << "The computer is executing move: " << move.first << ", " << move.second << endl;
+	currentState = currentState.executeMove(move);
+	turn = currentState.getTurn();
 }
-
-bool Game::executeMove(vector<int> move) {
+/*
+bool Game::executeMove(int* move) {
 	if (!isValid(move)) return false;
 
 	vector<Pile> piles = currentState.getPiles();
-	Pile firstPile = piles.at(move.at(0));
-	Pile secondPile = piles.at(move.at(1));
+	Pile firstPile = piles.at(move[0]);
+	Pile secondPile = piles.at(move[1]);
 
 	if (firstPile < secondPile) {
-		piles.at(move.at(0)) = secondPile - firstPile;
+		piles.at(move[0]) = secondPile - firstPile;
 	} else {
-		piles.at(move.at(0)) = firstPile - secondPile;
+		piles.at(move[0]) = firstPile - secondPile;
 	}
 
 	currentState.setPiles(piles);
 	return true;
 }
-
-bool Game::isValid(vector<int> move) {
-	for (size_t i = 0; i < move.size(); i++) {
-		if (size_t(move.at(i)) > currentState.getPiles().size()) return false;
+*/
+/*
+bool Game::isValid(int* move) {
+	for (size_t i = 0; i < 2; i++) {
+		if (size_t(move[i]) > currentState.getPiles().size()) return false;
 	}
 	return true;
+}
+*/
+
+void Game::printState() {
+	cout << "Pile indexes: ";
+	for (size_t i = 0; i < 3; i++) {
+		cout << i << ",\t";
+	}
+	cout << endl;
+	cout << "Pile Values:  ";
+	for (size_t i = 0; i < 3; i++) {
+		cout << currentState.getPiles()[i].getSize() << ",\t";
+	}
+	cout << endl << endl;
 }

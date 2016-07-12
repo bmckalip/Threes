@@ -1,36 +1,37 @@
-#pragma once
 #include "Pile.h"
 #include <vector>
-#include <set>
+#pragma once
 
-using namespace std;
+//using namespace std;
 
 class State {
 public:
 	//constructor
-							State(vector<Pile>, bool);
+							State(Pile piles[], bool);
 							State();
 
 	//getters
-	vector<Pile>			getPiles();
+	Pile*					getPiles();
 	bool					getTurn();
-	vector<int>				getBestMove();
-	vector <vector<int>>	getMoves();
+	pair<int, int>			getBestMove();
+	vector <pair<int,int>>	getMoves();
 	bool					isWinner();
 
 	//setters
-	void					setPiles(vector<Pile> newPiles);
-	State					executeMove(vector<int>);
-	friend bool				operator==(const State& rhs, const State& lhs);
+	void					setPiles(Pile* newPiles);
+	State					executeMove(pair<int, int>);
+	//friend bool			operator==(const State& rhs, const State& lhs);
+	bool					operator==(const State& other) const;
+
 private:
 	//utility functions
 	void					bestMove();
 	void					sortPiles();
 
 	//object variables
-	vector<Pile>			piles;
+	Pile					piles[3];
 	bool					turn; // 0 means it's the AI's turn and 1 means its the player's turn
-	vector<int>				optimalMove;
+	pair<int, int>			optimalMove;
 	bool					isVictory;
 
 	//static member variables

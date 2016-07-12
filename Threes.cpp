@@ -2,9 +2,10 @@
 #include "stdafx.h"
 #include "Game.h"
 #include <vector>
+#include <iostream>
 
 int main(){
-	vector<int> pileSizes = {3, 5, 10};
+	int pileSizes[] = { 3, 2, 1 };
 	Game game = Game(pileSizes);
 	game.play();
 	return 0;

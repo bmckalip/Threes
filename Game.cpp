@@ -4,21 +4,30 @@
 #include <iostream>
 
 Game::Game(int pileSizes[]) {
-	turn = 1;
+	turn = 0; //dont change unless debugging. reset to zero before submission (or if infrastructure changes)
 	Pile piles[] = { Pile(pileSizes[0]), Pile(pileSizes[1]), Pile(pileSizes[2]) };
 	currentState = State(piles, turn);
 	winner = -1;
 }
 
 int Game::play() {
-	
+	//determine if the AI will win with the current state.
+	if (!currentState.isVictory) {
+		//if not, copy the piles and make the player go first. set this as the current state.
+		currentState = State(currentState.getPiles(), !turn);
+		turn = !turn;
+	}
+
+	printState();
+	//while there is no winner, take turns.
 	while (winner == -1) {
-		printState();
 		if (turn == 0) {
 			AITurn();
 		} else {
 			playerTurn();
 		}
+		checkForWinner();
+		printState();
 	}
 	return winner;
 }
@@ -76,4 +85,10 @@ void Game::printState() {
 		cout << currentState.getPiles()[i].getSize() << ",\t";
 	}
 	cout << endl << endl;
+}
+
+void Game::checkForWinner() {
+	if (currentState.getPiles()[0] == 0 && currentState.getPiles()[1] == 0) {
+		winner = !turn;
+	}
 }

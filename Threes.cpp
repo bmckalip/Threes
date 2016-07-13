@@ -5,9 +5,16 @@
 #include <iostream>
 
 int main(){
-	int pileSizes[] = { 3, 2, 1 };
+	int pileSizes[] = { 1, 1, 5 };
 	Game game = Game(pileSizes);
-	game.play();
+	int winner = game.play();
+	int pause;
+	if(winner == 0){
+		cout << "AI has won!";
+	}else {
+		cout << "player has won!";
+	}
+	cin >> pause;
 	return 0;
 }
 

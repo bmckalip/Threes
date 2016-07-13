@@ -10,6 +10,8 @@ State::State(Pile piles[], bool turn) {
 	this->piles[2] = piles[2];
 	this->turn = turn;
 	sortPiles();
+	isVictory = isWinner();
+	bestMove();
 }
 
 //defualt constructor
@@ -21,7 +23,16 @@ State::State() {
 }
 
 void State::bestMove() {
-	optimalMove = make_pair(0, 0);
+	vector<pair<int, int >> moves = getMoves();
+
+	for (size_t i = 0; i < moves.size(); i++) {
+		pair<int, int> move = moves.at(i);
+		if (executeMove(move).isWinner()) {
+			optimalMove = move;
+			return;
+		}
+	}
+
 }
 
 vector<pair<int, int>> State::getMoves() {
@@ -54,32 +65,59 @@ bool State::isWinner() {
 
 	//base case: if there are no more moves, the game is over.
 	if (moves.empty()) {
-		//if the game ends and it is the AI's turn, the game is a losing game.
-		if (turn == 0) {
-			return false;
-		//if the game ends and it's the player's turn, the game is a winning game.
-		} else {
-			return true;
-		}
+		//if it's the AI's turn, it lost and vice versa.
+		return turn;
 	}
 
+	vector<pair<int, int>> winningMoves;
 	//simulate each move recursively and determine if any lead to a winning state
 	for (size_t i = 0; i < moves.size(); i++) {
-		//check if solution is memoized
-		//need to figure out how to properly overload the ==operator for std find to work
-		//if (find(memoStates.begin(), memoStates.end(), this) != memoStates.end()) {return isVictory;}
-		
-		//if solution is not memoized, recursively solve it:
 		State newState = this->executeMove(moves.at(i));
-		isVictory = newState.isWinner();
+
+		//check if state is memoized
+		//need to figure out how to properly overload the ==operator for std find to work
+		//if (find(memoStates.begin(), memoStates.end(), newState) != memoStates.end()) {return isVictory;}
+
+		//if this state is not memoized, recursively check if it's a winning move.
+		if (newState.isWinner()) {
+			winningMoves.push_back(moves.at(i));
+		}
+
 		//memoize the state
 		memoStates.push_back(newState);
 	}
 
-	return isVictory;
+	//determine if state is a victor based on winningMoves vector
+	if (!winningMoves.empty()) {
+		return true;
+	}else {
+		return false;
+	}
+
+//the above code replaces the verbose code below ina more compact form
+/*	if (turn == 0) {
+		if (!winningMoves.empty()) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	if (turn == 1) {
+		if (!winningMoves.empty()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}*/
 }
 
 State State::executeMove(pair<int, int> move) {
+	if (move == make_pair(0, 0)) { return *this; 
+	
+	}
 	//pile zero is never modified, therefore copy it directly.
 	Pile newPiles[] = { piles[0] , Pile(0) , Pile(0) };
 
@@ -94,8 +132,7 @@ State State::executeMove(pair<int, int> move) {
 	}
 	
 	//construct the new state and return it
-	bool newTurn = !turn;
-	return State(newPiles, newTurn);
+	return State(newPiles, !turn);
 	//return newState;
 
 }
@@ -105,6 +142,7 @@ bool State::getTurn() {
 }
 
 pair<int, int> State::getBestMove() {
+	bestMove();
 	return optimalMove;
 }
 
@@ -117,17 +155,22 @@ void State::setPiles(Pile* piles) {
 	this->piles[1] = piles[1];
 	this->piles[2] = piles[2];
 }
-
+//very sloppy selection sort:
 void State::sortPiles() {
-	int min = INT_MAX;
+	int min, minIndex, temp;
 	for (size_t i = 0; i < 3; i++) {
-		//find the minimum value
-		for (size_t j = i; i < 3; i++) {
-			if (piles[i] < min) {
-				min = piles[i].getSize();
+		min = INT_MAX;
+		//find the minimum value of the sub array
+		for (size_t j = i; j < 3; j++) {
+			if (piles[j] < min) {
+				minIndex = j;
+				min = piles[j].getSize();
 			}
 		}
-		piles[ i] = Pile(min);
+		//swap the value at the front with the minimum value.
+		temp = piles[minIndex].getSize();
+		piles[minIndex] = piles[i];
+		piles[i] = Pile(temp);
 	}
 }
 /*

@@ -12,6 +12,7 @@ public:
 private:
 	void playerTurn();
 	void AITurn();
+	void checkForWinner();
 //	bool executeMove(int*);
 //	bool isValid(int* move);
 

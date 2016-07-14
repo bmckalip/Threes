@@ -6,18 +6,26 @@ using namespace std;
 
 class Game {
 public:
-	Game(int[]);
+	Game(int[]); //constructor
 	int play();
-	void printState();
-private:
-	void playerTurn();
-	void AITurn();
-	void checkForWinner();
-	pair<int, int> validateInput(pair<int, int>);
-	bool IsInBounds(int value, int low, int high);
 
-	State currentState;
-	bool turn;
-	int winner;
+private:
+	//object functions
+	void			printState();
+	void			playerTurn();
+	void			AITurn();
+	void			checkForWinner();
+	pair<int, int>	validateInput(pair<int, int>);
+	bool			IsInBounds(int value, int low, int high);
+	void			rigGame();
+
+	//object variables
+	State	currentState;
+	int		winner;
+	
+	//static member variables
+	const static pair<int, int> INVALID_MOVE;
+	const static bool			ID_AI;
+	const static bool			ID_PLAYER;
 };
 

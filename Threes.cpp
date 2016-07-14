@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
 #include <iostream>
-
+//brnach: n_piles
 int main(){
 	//define the participant identities
 	const bool AI = 0;
@@ -10,7 +10,7 @@ int main(){
 	//declare three piles
 	int pileSizes[3];
 
-	//prompt user to define the sizes of these piles
+	//prompt user to define the sizes of these piles. no input validation is done here.
 	cout << "enter the three desired pile sizes separated by spaces (eg: 2 1 5): ";
 	cin >> pileSizes[0] >> pileSizes[1] >> pileSizes[2];
 
@@ -24,9 +24,8 @@ int main(){
 		cout << "you have no more moves, AI has won!";
 	}else {
 		//should never print:
-		cout << "AI has no more moves, you has won!";
+		cout << "AI has no more moves, you have won!";
 	}
-
 	return 0;
 }
 

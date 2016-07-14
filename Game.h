@@ -13,8 +13,8 @@ private:
 	void playerTurn();
 	void AITurn();
 	void checkForWinner();
-//	bool executeMove(int*);
-//	bool isValid(int* move);
+	pair<int, int> validateInput(pair<int, int>);
+	bool IsInBounds(int value, int low, int high);
 
 	State currentState;
 	bool turn;

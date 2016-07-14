@@ -5,7 +5,10 @@
 #include <iostream>
 
 int main(){
-	int pileSizes[] = { 1, 1, 5 };
+	int pileSizes[3];
+	cout << "enter the three desired pile sizes separated by spaces (eg: 2 1 5): ";
+	cin >> pileSizes[0] >> pileSizes[1] >> pileSizes[2];
+
 	Game game = Game(pileSizes);
 	int winner = game.play();
 	int pause;

@@ -33,3 +33,7 @@ Pile operator-(const Pile& first, const Pile& second) {
 bool Pile::operator==(const Pile& other) const {
 	return ((this->size == other.size) ? true : false);
 }
+
+bool Pile::operator!=(const Pile& other) const {
+	return *this == other ? false : true;
+}

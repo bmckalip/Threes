@@ -75,8 +75,9 @@ bool State::isWinner() {
 		State newState = this->executeMove(moves.at(i));
 
 		//check if state is memoized
-		//need to figure out how to properly overload the ==operator for std find to work
-		//if (find(memoStates.begin(), memoStates.end(), newState) != memoStates.end()) {return isVictory;}
+		if (find(memoStates.begin(), memoStates.end(), newState) != memoStates.end()) {
+			return newState.isVictory;
+		}
 
 		//if this state is not memoized, recursively check if it's a winning move.
 		if (newState.isWinner()) {
@@ -93,31 +94,13 @@ bool State::isWinner() {
 	}else {
 		return false;
 	}
-
-//the above code replaces the verbose code below ina more compact form
-/*	if (turn == 0) {
-		if (!winningMoves.empty()) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
-
-	if (turn == 1) {
-		if (!winningMoves.empty()) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}*/
 }
 
 State State::executeMove(pair<int, int> move) {
-	if (move == make_pair(0, 0)) { return *this; 
-	
+	if (move == make_pair(0, 0)) { 
+		return *this; 
 	}
+
 	//pile zero is never modified, therefore copy it directly.
 	Pile newPiles[] = { piles[0] , Pile(0) , Pile(0) };
 
@@ -157,6 +140,12 @@ void State::setPiles(Pile* piles) {
 }
 //very sloppy selection sort:
 void State::sortPiles() {
+	/*
+	we wrote our program to handle input in ascending order before we realized it was supposed to be done
+	in decending order, so our program handles it in ascending order on the backend, and when it's time
+	to print strates and handle user input, it is printed backwards and converted when necessary.
+	*/
+
 	int min, minIndex, temp;
 	for (size_t i = 0; i < 3; i++) {
 		min = INT_MAX;
@@ -173,17 +162,15 @@ void State::sortPiles() {
 		piles[i] = Pile(temp);
 	}
 }
-/*
-bool operator==(const State& rhs, const State& lhs) {
-	if (rhs.piles == lhs.piles && lhs.turn == rhs.turn) {
-		return true;
-	}
-	return false;
-}
-*/
+
 bool State::operator==(const State& other) const {
-	if (this->piles == other.piles && this->turn == other.turn) {
-		return true;
+	for (int i = 0; i < 3; i++) {
+		if (this->piles[i] != other.piles[i]) {
+			return false;
+		}
 	}
-	return false;
+	if (this->turn != other.turn) {
+		return false;
+	}
+	return true;
 }

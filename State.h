@@ -21,7 +21,7 @@ public:
 	bool			isVictory;
 
 private:
-	//utility functions
+	//core algorithmic functions
 	void					sortPiles();
 	bool					isWinner();
 	vector <pair<int, int>>	getMoves();

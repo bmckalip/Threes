@@ -11,11 +11,15 @@ const bool Game::ID_PLAYER = 1;
 
 //class constructor
 Game::Game(int pileSizes[]) {
+	//this process can take awhile is there is high variance between pile sizes, even with memoization;
+	//so prompt the user and let them know to keep waiting:
+	cout << "Calculations are occuring, please wait." << endl;
 	//construct an array of piles based on the recieved size input.
 	Pile piles[] = { Pile(pileSizes[0]), Pile(pileSizes[1]), Pile(pileSizes[2]) };
 	currentState = State(piles, ID_AI);
 	//declare that there is no current winner
 	winner = -1;
+	//ensure the AI will win by manipulating who goes first.
 	rigGame();
 }
 
@@ -118,13 +122,12 @@ void Game::printState() {
 	/*
 	we wrote our program to handle input in ascending order before we realized it was supposed to be done
 	in decending order, so our program handles it in ascending order on the backend, and when it's time
-	to print strates and handle user input, it is printed backwards and converted when necessary.
+	to print states and handle user input, it is printed backwards and converted when necessary.
 	*/
 	cout << "Pile indexes: ";
 	for (size_t i = 3; i > 0; i--) {
 		cout << i << " \t";
 	}
-
 	cout << endl << "Pile Values:  ";
 	for (size_t i = 3; i > 0; i--) {
 		cout << currentState.getPiles()[i - 1].getSize() << " \t";

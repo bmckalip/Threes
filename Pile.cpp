@@ -34,7 +34,7 @@ bool operator>(const Pile& first, const Pile& second) {
 	}
 }
 
-//I should overload the <= and >= operators aswell, but i never end up using them 
+//I should overload the <= and >= operators aswell, but we never end up using them so it doesn't really matter
 
 //determine is a pile is equal to another
 bool Pile::operator==(const Pile& other) const {

@@ -23,7 +23,7 @@ State::State() {
 	this->turn = 0;
 }
 
-//very sloppy selection sort:
+//essentially selection sort
 void State::sortPiles() {
 	int min, minIndex, temp;
 	for (size_t i = 0; i < 3; i++) {
@@ -66,6 +66,7 @@ bool State::isWinner() {
 			winningMoves.push_back(moves.at(i));
 			//we only need to find one winning move in a tree to make it a winning state,
 			//so if this occurs, break and don't check the rest of the moves right now.
+			//this will cut down on exploring unnecessary state trees.
 			break;
 		}
 
@@ -106,7 +107,6 @@ vector<pair<int, int>> State::getMoves() {
 
 void State::bestMove() {
 	vector<pair<int, int >> moves = getMoves();
-
 	//check each available move
 	for (size_t i = 0; i < moves.size(); i++) {
 		pair<int, int> move = moves.at(i);
@@ -150,14 +150,15 @@ Pile* State::getPiles() {
 
 //checks if two states are equal
 bool State::operator==(const State& other) const {
+	if (this->turn != other.turn) {
+		return false;
+	}
+
 	for (int i = 0; i < 3; i++) {
 		if (this->piles[i] != other.piles[i]) {
 			return false;
 		}
 	}
-
-	if (this->turn != other.turn) {
-		return false;
-	}
+	//otherwise, they are equal
 	return true;
 }
